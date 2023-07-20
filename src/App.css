@@ -1,0 +1,13 @@
+.welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 720px;
+    min-height: 500px;
+    text-align: center;
+    margin: 72px auto;
+}
+
+.h1-custom {
+    font-size: 70px;
+}

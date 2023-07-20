@@ -1,38 +1,38 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Signup() {
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loginFailed, setLoginFailed] = useState(false);
+    const [signupError, setSignupError] = useState(null);
 
-    const navigate = useNavigate()
-    const authContext = useContext(AuthContext)
+    const navigate = useNavigate();
 
-    function login() {
-        const isCorrectUsername = username === "ngaiti@gmail.com"
-        const isCorrectPassword = password === "password"
-        if (isCorrectUsername && isCorrectPassword) {
-            authContext.setToken("4434");
-            navigate("/Home")
-        } else {
-            setLoginFailed(true)
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate('/home');
+        } catch (error) {
+            setSignupError("Error creating account. Please try again.");
+            console.error(error);
         }
-    }
+    };
 
     return (
         <Container>
-            <h1 className="my-3"> Create your account</h1>
+            <h1 className="my-3">Sign up for an account</h1>
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
                         type="email"
                         placeholder="Enter email"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group>
@@ -44,10 +44,11 @@ export default function Signup() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button className="my-3" variant="outline-dark" onClick={login}>Signup</Button>
+                <Button className="my-3" variant="outline-dark" onClick={handleSignup}>
+                    Sign Up
+                </Button>
             </Form>
-            {loginFailed && <p>Invalid email or password. Please try again.</p>}
+            {signupError && <p>{signupError}</p>}
         </Container>
-    )
-
+    );
 }

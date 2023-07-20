@@ -1,36 +1,30 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { AuthContext } from "../AuthContext";
 
-export default function Login() {
+export default function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loginError, setLoginError] = useState(null)
+    const [loginFailed, setLoginFailed] = useState(false);
 
     const navigate = useNavigate()
+    const authContext = useContext(AuthContext)
 
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            await signInWithEmailAndPassword(auth, username, password);
-            navigate('/home')
-        } catch (error) {
-            if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-                setLoginError("Incorrect email or password. Please try again.");
-            } else {
-                setLoginError("An error occurred. Please try again later.");
-            }
-            console.error(error);
+    function login() {
+        const isCorrectUsername = username === "ngaiti@gmail.com"
+        const isCorrectPassword = password === "password"
+        if (isCorrectUsername && isCorrectPassword) {
+            authContext.setToken("4434");
+            navigate("/Home")
+        } else {
+            setLoginFailed(true)
         }
-    };
-
+    }
 
     return (
         <Container>
-            <h1 className="my-3"> Login to your account</h1>
+            <h1 className="my-3"> Create your account</h1>
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
@@ -50,9 +44,10 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button className="my-3" variant="outline-dark" onClick={handleLogin}>Login</Button>
+                <Button className="my-3" variant="outline-dark" onClick={login}>Signup</Button>
             </Form>
-            {loginError && <p>{loginError}</p>} {/* Render the error message if loginError is not null */}        </Container>
+            {loginFailed && <p>Invalid email or password. Please try again.</p>}
+        </Container>
     )
 
 }

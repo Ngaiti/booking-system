@@ -1,10 +1,31 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Modal, Form } from 'react-bootstrap';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = 'https://booking-system-api-ngaiti.sigma-school-full-stack.repl.co/bookings';
 
 const Home = () => {
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                navigate('/login');
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, [navigate]);
+
+
+
     const [bookings, setBookings] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newBooking, setNewBooking] = useState({
@@ -16,8 +37,52 @@ const Home = () => {
         email: '',
         user_id: ''
     });
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
-    // Fetch all bookings from the API
+
+    const handleOpenModal = (booking) => {
+        setShowModal(true);
+        if (booking) {
+            setSelectedBooking(booking);
+            setNewBooking({
+                title: booking.title,
+                description: booking.description,
+                date: booking.date,
+                time: booking.time,
+                phone_number: booking.phone_number,
+                email: booking.email,
+                user_id: booking.user_id,
+            });
+        } else {
+            setSelectedBooking(null);
+            setNewBooking({
+                title: '',
+                description: '',
+                date: '',
+                time: '',
+                phone_number: '',
+                email: '',
+                user_id: '',
+            });
+        }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        // setSelectedBooking(null);
+        setNewBooking({
+            title: '',
+            description: '',
+            date: '',
+            time: '',
+            phone_number: '',
+            email: '',
+            user_id: ''
+        });
+    };
+
+
+    // Fetch all bookings
     const fetchBookings = async () => {
         try {
             const response = await axios.get(API_URL);
@@ -39,32 +104,42 @@ const Home = () => {
         }
     };
 
-    // Delete a booking
-    const deleteBooking = async (bookingId) => {
+    //Update booking
+    const updateBooking = async () => {
         try {
-            await axios.delete(`${API_URL}/${bookingId}`);
-            setBookings(bookings.filter((booking) => booking.booking_id !== bookingId));
+            if (!selectedBooking) {
+                console.error('Error updating booking: No booking selected.');
+                return;
+            }
+            const response = await axios.put(`${API_URL}/${selectedBooking.booking_id}`, newBooking);
+            const updatedBooking = response.data && response.data.data;
+            setBookings((prevBookings) =>
+                prevBookings.map((booking) =>
+                    booking.booking_id === updatedBooking.booking_id
+                )
+            );
+            handleCloseModal();
         } catch (error) {
-            console.error('Error:', error.message);
+            console.error('Error updating booking:', error.message);
         }
     };
 
-    const handleOpenModal = () => {
-        setShowModal(true);
+
+    // Delete a booking
+    const deleteBooking = async (bookingId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this booking?");
+        if (confirmDelete) {
+            try {
+                await axios.delete(`${API_URL}/${bookingId}`);
+                setBookings(bookings.filter((booking) => booking.booking_id !== bookingId));
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setNewBooking({
-            title: '',
-            description: '',
-            date: '',
-            time: '',
-            phone_number: '',
-            email: '',
-            user_id: ''
-        });
-    };
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -75,10 +150,13 @@ const Home = () => {
         fetchBookings();
     }, []);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
     return (
         <Container className="mt-5">
             <h1 className="mb-4">Booking App</h1>
-            <Button variant="btn btn-outline-primary" onClick={handleOpenModal} className="mb-3">
+            <Button variant="btn btn-outline-primary" onClick={() => handleOpenModal(null)} className="mb-3">
                 Create Booking
             </Button>
             <Table striped bordered hover>
@@ -107,6 +185,9 @@ const Home = () => {
                             <td>{booking.email}</td>
                             <td>{booking.user_id}</td>
                             <td>
+                                <Button variant="btn btn-outline-primary mx-4" className='m-3' onClick={() => handleOpenModal(booking)}>
+                                    Edit
+                                </Button>
                                 <Button variant="btn btn-outline-danger" onClick={() => deleteBooking(booking.booking_id)}>
                                     Delete
                                 </Button>
@@ -117,7 +198,7 @@ const Home = () => {
             </Table>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Create Booking</Modal.Title>
+                    <Modal.Title>{selectedBooking ? 'Edit Booking' : 'Create Booking'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -155,8 +236,8 @@ const Home = () => {
                     <Button variant="btn btn-outline-secondary" onClick={handleCloseModal}>
                         Cancel
                     </Button>
-                    <Button variant="btn btn-outline-primary" onClick={createBooking}>
-                        Create
+                    <Button variant="btn btn-outline-primary" onClick={selectedBooking ? updateBooking : createBooking}>
+                        {selectedBooking ? 'Update Booking' : 'Create Booking'}
                     </Button>
                 </Modal.Footer>
             </Modal>

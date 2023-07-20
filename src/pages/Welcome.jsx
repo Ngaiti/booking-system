@@ -23,6 +23,7 @@ function Welcome() {
                     <Weather />
 
                     <br />
+                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>
                     <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/login">Login</Button>
                 </div>
             </div>

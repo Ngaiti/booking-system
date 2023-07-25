@@ -20,7 +20,7 @@ function Welcome() {
             <div>
                 <div className='text-center'>
                     <h1 className="h1-custom"> Hello there! It is now {currentTime.toString()}</h1>
-                    <Weather />
+                    {/* <Weather /> */}
 
                     <br />
                     <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>

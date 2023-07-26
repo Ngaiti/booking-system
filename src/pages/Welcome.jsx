@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap"
-import Weather from "../components/Weather";
+import CurrentMovies from "../components/CurrentMovies";
 
 function Welcome() {
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -20,7 +20,7 @@ function Welcome() {
             <div>
                 <div className='text-center'>
                     <h1 className="h1-custom"> Hello there! It is now {currentTime.toString()}</h1>
-                    {/* <Weather /> */}
+                    <CurrentMovies />
 
                     <br />
                     <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>

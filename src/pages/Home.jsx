@@ -1,8 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
 
 export default function Home() {
     const [movies, setMovies] = useState([]);
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                navigate('/login');
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, [navigate]);
 
     useEffect(() => {
         const fetchMovies = async () => {

@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login'
 import ErrorPage from './pages/Error';
 import Signup from './pages/Signup';
+import ProfilePage from './pages/ProfilePage';
 
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { Container, Navbar } from 'react-bootstrap';
@@ -50,10 +51,8 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
               <Route path="*" element={<ErrorPage />} />
-              <Route element={
-                <Home />
-              }
-                path="home" />
+              <Route path="home" element={<Home />} />
+              <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Routes>
         </BrowserRouter>

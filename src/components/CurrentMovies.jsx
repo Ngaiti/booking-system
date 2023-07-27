@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 export default function CurrentMovies() {
 
@@ -31,29 +31,33 @@ export default function CurrentMovies() {
         return chunkedArr;
     }
 
+    const chunkedMovies = chunkArray(movies, 5).slice(0, 2);
+
     return (
-        <Container>
-            <h1>What&apos;s popular now</h1>
-            {chunkArray(movies, 4).map((chunk, rowIndex) => (
-                <Row key={rowIndex}>
-                    {chunk.map((movie) => (
-                        <Col key={movie.id} xs={12} sm={6} md={3}>
-                            <div>
-                                <h3>{movie.title}</h3>
-                                <p>Release Date: {movie.release_date}</p>
-                                <p>Overview: {movie.overview}</p>
-                                <p>Vote Average: {movie.vote_average}</p>
-                                <p>Vote Count: {movie.vote_count}</p>
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                    style={{ width: '100px', height: '150px' }}
-                                    alt={movie.title}
-                                />
-                            </div>
-                        </Col>
-                    ))}
-                </Row>
-            ))}
-        </Container>
+        <>
+            <h1 className="text-center"> Currently Most Popular Movies</h1>
+            <Container className="my-4">
+                {chunkedMovies.map((movieChunk, rowIndex) => (
+                    <Row key={rowIndex} className="mb-4">
+                        {movieChunk.map((movie, colIndex) => (
+                            <Col key={colIndex}>
+                                <Card>
+                                    <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+                                    <Card.Body>
+                                        <Card.Title>{movie.title}</Card.Title>
+                                        <Card.Text>
+                                            <strong>Vote Average:</strong> {movie.vote_average}
+                                        </Card.Text>
+                                        <Card.Text>
+                                            <strong>Vote Count:</strong> {movie.vote_count}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                ))}
+            </Container>
+        </>
     );
 }

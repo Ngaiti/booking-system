@@ -2,8 +2,28 @@ import { useState, useEffect } from 'react';
 import { storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Button, Container, Row, Col, Image, Form } from 'react-bootstrap';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                navigate('/login');
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, [navigate]);
+
+
     const [profileImageUrl, setProfileImageUrl] = useState('');
     const [username, setUsername] = useState('Ngaiti');
     const [briefDescription, setBriefDescription] = useState('');
@@ -46,20 +66,19 @@ const ProfilePage = () => {
 
     const handleSaveUsername = () => {
         setEditingUsername(false);
-        // Perform the update in the database if necessary
     };
 
     const handleSaveDescription = () => {
         setEditingDescription(false);
-        // Perform the update in the database if necessary
     };
 
     useEffect(() => {
         fetchProfileImageUrl();
-        // Simulate fetching brief description from database
         setBriefDescription("Whatever.");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [username]);
+
+
 
     return (
         <Container className="my-4">

@@ -4,10 +4,11 @@ import Login from './pages/Login'
 import ErrorPage from './pages/Error';
 import Signup from './pages/Signup';
 import ProfilePage from './pages/ProfilePage';
+import ProfilePage2 from './pages/ProfilePage2';
 
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
-import { Container, Navbar } from 'react-bootstrap';
-import "./App.css"
+import { Container, Navbar, NavDropdown } from 'react-bootstrap';
+// import "./App.css"
 import { AuthProvider } from './components/AuthProvider';
 import { auth } from './firebase';
 
@@ -28,9 +29,15 @@ function Layout() {
 
     <>
       <Navbar bg="light" variant="light" className='bg-dark text-light' >
-        <Container className="d-flex justify-content-between">
+        <Container>
           <Navbar.Brand className="text-light" href="/home">Home </Navbar.Brand>
-          <Navbar.Brand className="text-light" href="/" onClick={handleLogout}>Logout</Navbar.Brand>
+          <NavDropdown title="Profile" id="basic-nav-dropdown">
+            <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/" onClick={handleLogout}>
+              Logout
+            </NavDropdown.Item>
+          </NavDropdown>
         </Container>
       </Navbar>
       <Outlet />
@@ -53,6 +60,8 @@ function App() {
               <Route path="*" element={<ErrorPage />} />
               <Route path="home" element={<Home />} />
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="profile2" element={<ProfilePage2 />} />
+
             </Route>
           </Routes>
         </BrowserRouter>

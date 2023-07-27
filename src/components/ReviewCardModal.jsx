@@ -1,8 +1,7 @@
-import { useState } from "react"
 import { Modal, Form, Button } from "react-bootstrap";
 
 
-export default function ReviewCard({ show, onClose, onSave, selectedReview, newReview, handleChange }) {
+export default function ReviewCardModal({ show, onClose, onSave, selectedReview, newReview, handleChange }) {
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>

@@ -16,16 +16,15 @@ function Welcome() {
     }, []);
 
     return (
-        <div className="welcome">
-            <div>
-                <div className='text-center'>
-                    <h1 className="h1-custom"> Hello there! It is now {currentTime.toString()}</h1>
-                    <CurrentMovies />
-
-                    <br />
-                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>
-                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/login">Login</Button>
-                </div>
+        <div>
+            <div className='text-center'>
+                <br />
+                <h2 className="h2-custom"> {currentTime.toString()}</h2>
+                <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>
+                <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/login">Login</Button>
+                <br />
+                <CurrentMovies />
+                <br />
             </div>
         </div>
     )

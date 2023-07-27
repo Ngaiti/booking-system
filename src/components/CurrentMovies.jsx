@@ -35,7 +35,7 @@ export default function CurrentMovies() {
 
     return (
         <>
-            <h1 className="text-center"> Currently Most Popular Movies</h1>
+            <h1 className="text-center"> Currently Popular Movies</h1>
             <Container className="my-4">
                 {chunkedMovies.map((movieChunk, rowIndex) => (
                     <Row key={rowIndex} className="mb-4">

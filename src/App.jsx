@@ -5,6 +5,7 @@ import ErrorPage from './pages/Error';
 import Signup from './pages/Signup';
 import ProfilePage from './pages/ProfilePage';
 import ProfilePage2 from './pages/ProfilePage2';
+import Reviews from './pages/Reviews';
 
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { Container, Navbar, NavDropdown } from 'react-bootstrap';
@@ -33,6 +34,7 @@ function Layout() {
           <Navbar.Brand className="text-light" href="/home">Home </Navbar.Brand>
           <NavDropdown title="Profile" id="basic-nav-dropdown">
             <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>
+            <NavDropdown.Item href="/reviews">Reviews</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/" onClick={handleLogout}>
               Logout
@@ -59,6 +61,7 @@ function App() {
               <Route path="signup" element={<Signup />} />
               <Route path="*" element={<ErrorPage />} />
               <Route path="home" element={<Home />} />
+              <Route path="reviews" element={<Reviews />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="profile2" element={<ProfilePage2 />} />
 

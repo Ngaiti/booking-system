@@ -19,6 +19,14 @@
         {
             "src": "/home",
             "dest": "/"
+        },
+        {
+            "src": "/reviews",
+            "dest": "/"
+        },
+        {
+            "src": "/profile",
+            "dest": "/"
         }
     ]
 }

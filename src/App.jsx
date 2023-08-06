@@ -12,8 +12,8 @@ import { Container, Navbar, NavDropdown } from 'react-bootstrap';
 // import "./App.css"
 import { AuthProvider } from './components/AuthProvider';
 import { auth } from './firebase';
-import TwitchAuthentication from './components/TwitchAuthentication';
-import { TwitchAuthProvider } from './components/TwitchAuthContext';
+import DummyData from './components/GameDetails';
+import LastMonthConsoleGames from './components/LatestGames';
 
 
 function Layout() {
@@ -55,23 +55,22 @@ function App() {
   return (
     <div>
       <AuthProvider>
-        <TwitchAuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Welcome />} />
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-                <Route path="*" element={<ErrorPage />} />
-                <Route path="home" element={<Home />} />
-                <Route path="reviews" element={<Reviews />} />
-                <Route path="profile" element={<ProfilePage />} />
-                <Route path="profile2" element={<ProfilePage2 />} />
-
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </TwitchAuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Welcome />} />
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="*" element={<ErrorPage />} />
+              <Route path="home" element={<Home />} />
+              <Route path="reviews" element={<Reviews />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="profile2" element={<ProfilePage2 />} />
+              <Route path="games" element={<DummyData />} />
+              <Route path="newgames" element={<LastMonthConsoleGames />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </div >
   )

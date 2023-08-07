@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const API_KEY = '2b3d83205aaa4cc1bc4c7a65e9fbf647'; // Replace 'YOUR_API_KEY' with your actual API key
-const BASE_URL = 'https://api.rawg.io/api/';
+import { API_KEY, BASE_URL } from '../RAWG';
 
 const LastMonthPS5Games = () => {
     const [ps5Games, setPS5Games] = useState([]);

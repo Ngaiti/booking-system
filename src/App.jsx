@@ -9,11 +9,12 @@ import Reviews from './pages/Reviews';
 
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { Container, Navbar, NavDropdown } from 'react-bootstrap';
-// import "./App.css"
+import "./App.css"
 import { AuthProvider } from './components/AuthProvider';
 import { auth } from './firebase';
-import DummyData from './components/GameDetails';
 import LastMonthConsoleGames from './components/LatestGames';
+import GameDetails from './pages/GameDetails';
+import DummyData from './components/DummyData';
 
 
 function Layout() {
@@ -52,6 +53,8 @@ function Layout() {
 
 
 function App() {
+
+  const gameId = '26385'
   return (
     <div>
       <AuthProvider>
@@ -68,6 +71,7 @@ function App() {
               <Route path="profile2" element={<ProfilePage2 />} />
               <Route path="games" element={<DummyData />} />
               <Route path="newgames" element={<LastMonthConsoleGames />} />
+              <Route path="game/:gameId" element={<GameDetails />} />
             </Route>
           </Routes>
         </BrowserRouter>

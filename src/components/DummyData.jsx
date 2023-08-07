@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const API_KEY = '2b3d83205aaa4cc1bc4c7a65e9fbf647'; // Replace 'YOUR_API_KEY' with your actual API key
-const BASE_URL = 'https://api.rawg.io/api/';
+import { API_KEY, BASE_URL } from '../RAWG';
+import { Link } from 'react-router-dom';
 
 const DummyData = () => {
     const [platforms, setPlatforms] = useState([]);
@@ -45,14 +44,18 @@ const DummyData = () => {
             <h1>Platforms</h1>
             <ul>
                 {platforms.map((platform) => (
-                    <li key={platform.id}>{platform.id}{platform.name}</li>
+                    <li key={platform.id}>
+                        {platform.id} {platform.name}
+                    </li>
                 ))}
             </ul>
 
             <h1>Games</h1>
             <ul>
                 {games.map((game) => (
-                    <li key={game.id}>{game.name}</li>
+                    <li key={game.id}>
+                        <Link to={`/game/${game.id}`}>{game.name}</Link>
+                    </li>
                 ))}
             </ul>
         </div>

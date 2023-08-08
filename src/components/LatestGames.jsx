@@ -55,6 +55,7 @@ const LastMonthPS5Games = () => {
         return <div>Loading...</div>;
     }
 
+
     return (
         <div>
             <h1>PS5 Games Released Last Month</h1>

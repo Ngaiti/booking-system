@@ -9,7 +9,6 @@ import Reviews from './pages/Reviews';
 
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { Container, Navbar, NavDropdown } from 'react-bootstrap';
-import "./App.css"
 import { AuthProvider } from './components/AuthProvider';
 import { auth } from './firebase';
 import LastMonthConsoleGames from './components/LatestGames';
@@ -34,8 +33,7 @@ function Layout() {
     <>
       <Navbar bg="light" variant="light" className='bg-dark text-light' >
         <Container>
-          <Navbar.Brand className="text-light" href="/home">Home </Navbar.Brand>
-          <NavDropdown title="Profile" id="basic-nav-dropdown">
+          <Navbar.Brand className="text-light" href="/home">Home </Navbar.Brand>          <NavDropdown title="Profile" id="basic-nav-dropdown">
             <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>
             <NavDropdown.Item href="/reviews">Reviews</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -53,8 +51,6 @@ function Layout() {
 
 
 function App() {
-
-  const gameId = '26385'
   return (
     <div>
       <AuthProvider>
@@ -71,7 +67,7 @@ function App() {
               <Route path="profile2" element={<ProfilePage2 />} />
               <Route path="games" element={<DummyData />} />
               <Route path="newgames" element={<LastMonthConsoleGames />} />
-              <Route path="game/:gameId" element={<GameDetails />} />
+              <Route path="games/:gameId" element={<GameDetails />} />
             </Route>
           </Routes>
         </BrowserRouter>

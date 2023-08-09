@@ -54,7 +54,7 @@ const DummyData = () => {
             <ul>
                 {games.map((game) => (
                     <li key={game.id}>
-                        <Link to={`/game/${game.id}`}>{game.name}</Link>
+                        <Link to={`/games/${game.id}`}>{game.name}</Link>
                     </li>
                 ))}
             </ul>

@@ -11,9 +11,15 @@ import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-
 import { Container, Navbar, NavDropdown } from 'react-bootstrap';
 import { AuthProvider } from './components/AuthProvider';
 import { auth } from './firebase';
-import LastMonthConsoleGames from './components/LatestGames';
 import GameDetails from './pages/GameDetails';
 import DummyData from './components/DummyData';
+import SearchList from './components/SearchBar';
+import Search from './SearchBar/App';
+import SearchBar from './SearchBar/SearchBar';
+import { FaEquals } from "react-icons/fa";
+import ProfileSideBar from './components/SideBar';
+import IconButton from './components/IconButton';
+import { useState } from 'react';
 
 
 function Layout() {
@@ -28,12 +34,25 @@ function Layout() {
       console.error('Logout error:', error);
     }
   };
+
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Initially hidden
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
+
   return (
 
     <>
-      <Navbar bg="light" variant="light" className='bg-dark text-light' >
+      <Navbar bg="light" variant="light" className="bg-dark text-light">
         <Container>
-          <Navbar.Brand className="text-light" href="/home">Home </Navbar.Brand>          <NavDropdown title="Profile" id="basic-nav-dropdown">
+          <IconButton
+            className="bi bi-list"
+            onClick={toggleSidebar}
+            style={{ marginRight: '10px' }}
+          />
+          <h3>Welcome sluts</h3>
+          <NavDropdown title="Profile" id="basic-nav-dropdown">
             <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>
             <NavDropdown.Item href="/reviews">Reviews</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -43,7 +62,12 @@ function Layout() {
           </NavDropdown>
         </Container>
       </Navbar>
-      <Outlet />
+      <div className="d-flex">
+        {isSidebarVisible && <ProfileSideBar />}
+        <div className={`flex-grow-1 ${isSidebarVisible ? 'ml-2' : ''}`}>
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 }
@@ -57,17 +81,17 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Welcome />} />
+              <Route index element={<Home />} />
+              <Route path="welcome" element={<Welcome />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
               <Route path="*" element={<ErrorPage />} />
-              <Route path="home" element={<Home />} />
               <Route path="reviews" element={<Reviews />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="profile2" element={<ProfilePage2 />} />
               <Route path="games" element={<DummyData />} />
-              <Route path="newgames" element={<LastMonthConsoleGames />} />
               <Route path="games/:gameId" element={<GameDetails />} />
+              <Route path="search" element={<SearchBar />} />
             </Route>
           </Routes>
         </BrowserRouter>

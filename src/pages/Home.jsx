@@ -5,6 +5,11 @@ import { auth } from '../firebase';
 import axios from 'axios';
 import { API_KEY, BASE_URL } from '../RAWG';
 import './Gamelist.css'
+import { FaXbox, FaPlaystation } from "react-icons/fa";
+import { FaComputer } from "react-icons/fa6";
+
+import { BsNintendoSwitch } from "react-icons/bs";
+
 
 export default function Home() {
 
@@ -62,6 +67,21 @@ export default function Home() {
             });
     }, []);
 
+    function getPlatformIcon(platformId) {
+        switch (platformId) {
+            case 4:
+                return <FaComputer />;
+            case 186:
+                return <FaXbox />;
+            case 7:
+                return <BsNintendoSwitch />;
+            case 18:
+            case 187:
+                return <FaPlaystation />;
+            default:
+                return null; //
+        }
+    }
 
 
 
@@ -72,8 +92,8 @@ export default function Home() {
                 <Row xs={1} md={2} lg={4} className="g-4">
                     {games.map((game) => (
                         <Col key={game.id}>
-                            <Link to={`/games/${game.id}`}>
-                                <Card className="game-card">
+                            <Card className="game-card">
+                                <Link to={`/games/${game.id}`}>
                                     {game.background_image && (
                                         <Card.Img
                                             variant="top"
@@ -83,21 +103,29 @@ export default function Home() {
                                             className="img-fluid rounded hover-scale-up"
                                         />
                                     )}
-                                    <Card.Body>
-                                        <Card.Title className="text-center">{game.name}</Card.Title>
-                                        <div className="hover-details">
-                                            <p>Release Date: {game.released}</p>
-                                            <p>Metacritic: {game.metacritic}</p>
-                                            <p>
-                                                Platforms:{' '}
-                                                {game.platforms.map((platform, index) => (
-                                                    <span key={index}>{platform.platform.name}, </span>
-                                                ))}
-                                            </p>
+                                </Link>
+                                <Card.Body>
+                                    <Card.Title className="text-center">{game.name}
+                                        <div>
+                                            {game.platforms.map((platform, index) => (
+                                                <span key={index}>
+                                                    {getPlatformIcon(platform.platform.id)}{' '}
+                                                </span>
+                                            ))}
                                         </div>
-                                    </Card.Body>
-                                </Card>
-                            </Link>
+                                    </Card.Title>
+                                    <div className="hover-details">
+                                        <p>Release Date: {game.released}</p>
+                                        <p>Metacritic: {game.metacritic}</p>
+                                        <p>
+                                            Platforms:{' '}
+                                            {game.platforms.map((platform, index) => (
+                                                <span key={index}>{platform.platform.name}, </span>
+                                            ))}
+                                        </p>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                     ))}
                 </Row>

@@ -16,7 +16,7 @@ export default function Login() {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, username, password);
-            navigate('/home')
+            navigate('/')
         } catch (error) {
             if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
                 setLoginError("Incorrect email or password. Please try again.");

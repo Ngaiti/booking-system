@@ -6,22 +6,9 @@ export default function ProfileSideBar() {
 
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
-    const toggleSidebar = () => {
-        setIsSidebarVisible(!isSidebarVisible);
-    };
 
     return (
         <>
-            <IconButton
-                className="bi bi-playstation"
-                onClick={toggleSidebar}
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 1,
-                }}
-            />
 
             {isSidebarVisible && (
                 <Col
@@ -29,7 +16,14 @@ export default function ProfileSideBar() {
                     className="d-flex flex-column justify-content-start align-items-start bg-light vh-100"
                     style={{ position: 'sticky', top: 0 }}
                 >
-                    {/* Sidebar content */}
+                    <br />
+                    <IconButton className="bi bi-house" href="/" text="Home" />
+                    <IconButton className="bi bi-search" href="/explore " text="Explore" />
+                    <IconButton className="bi bi-journal-text" text="Lists" />
+                    <IconButton className="bi bi-bookmark" text="Bookmarks" />
+                    <IconButton className="bi bi-patch-check" text="Verified" />
+                    <IconButton className="bi bi-person" href="/profile" text="Profile" />
+                    <IconButton className="bi bi-filter-circle" text="More" />
                 </Col>
             )}
         </>

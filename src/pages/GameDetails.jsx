@@ -54,13 +54,7 @@ const GameDetails = () => {
                             />
                         </div>
                     )}
-                    {/* {game.background_image_additional && (
-                        <img
-                            src={game.background_image_additional}
-                            alt={game.name}
-                            className="img-fluid"
-                        />
-                    )} */}
+
                 </Col>
             </Row>
             <Row className="mt-4">
@@ -69,6 +63,9 @@ const GameDetails = () => {
                     <GameDescription description={game.description} />
                     <p>Released: {game.released}</p>
                     <p>Metacritic rating: {game.metacritic}</p>
+                    <p>Metacritic rating: {game.metacritic}</p>
+                    <p>Metacritic rating: {game.metacritic}</p>
+
                 </Col>
             </Row>
             <Row className="mt-4">

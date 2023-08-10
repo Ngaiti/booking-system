@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_KEY, BASE_URL } from '../RAWG';
 
@@ -9,8 +9,54 @@ const SearchList = () => {
     const [metacriticFilter, setMetacriticFilter] = useState('');
     const [genreFilter, setGenreFilter] = useState('');
     const [ordering, setOrdering] = useState('name'); // Default ordering by name
+    const [platforms, setPlatforms] = useState([]);
+    const [metacriticOptions, setMetacriticOptions] = useState([]);
+    const [genreOptions, setGenreOptions] = useState([]);
 
     useEffect(() => {
+        // Fetch platforms
+        axios
+            .get(`${BASE_URL}platforms`, {
+                params: {
+                    key: API_KEY,
+                },
+            })
+            .then((response) => {
+                setPlatforms(response.data.results);
+            })
+            .catch((error) => {
+                console.error('Error fetching platforms:', error);
+            });
+
+        // Fetch metacritic options (you need to adjust the endpoint according to your API)
+        // Example assuming an endpoint like `${BASE_URL}metacritic-options`
+        axios
+            .get(`${BASE_URL}metacritic-options`, {
+                params: {
+                    key: API_KEY,
+                },
+            })
+            .then((response) => {
+                setMetacriticOptions(response.data.results);
+            })
+            .catch((error) => {
+                console.error('Error fetching metacritic options:', error);
+            });
+
+        // Fetch genre options
+        axios
+            .get(`${BASE_URL}genres`, {
+                params: {
+                    key: API_KEY,
+                },
+            })
+            .then((response) => {
+                setGenreOptions(response.data.results);
+            })
+            .catch((error) => {
+                console.error('Error fetching genre options:', error);
+            });
+
         // Fetch games based on filters and ordering
         const fetchGames = async () => {
             try {
@@ -39,43 +85,32 @@ const SearchList = () => {
 
     return (
         <div>
-            <input
-                type="text"
-                placeholder="Search games..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            {/* ... other input fields ... */}
+
+            {/* Platform Dropdown */}
             <select value={platformFilter} onChange={(e) => setPlatformFilter(e.target.value)}>
                 <option value="">All Platforms</option>
-                {/* Add platform options */}
+                {platforms.map(platform => (
+                    <option key={platform.id} value={platform.id}>{platform.name}</option>
+                ))}
             </select>
+
+            {/* Metacritic Dropdown */}
             <select value={metacriticFilter} onChange={(e) => setMetacriticFilter(e.target.value)}>
                 <option value="">All Metacritic Ratings</option>
-                {/* Add metacritic options */}
+                {metacriticOptions.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
             </select>
+
+            {/* Genre Dropdown */}
             <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)}>
                 <option value="">All Genres</option>
-                {/* Add genre options */}
-            </select>
-            <select value={ordering} onChange={(e) => setOrdering(e.target.value)}>
-                <option value="name">Name (A-Z)</option>
-                <option value="-name">Name (Z-A)</option>
-                <option value="released">Released Date</option>
-                {/* Add more ordering options */}
-            </select>
-
-            {/* Add a Search Button */}
-            <button onClick={handleSearch}>Search</button>
-
-            {/* Display the filtered and ordered games */}
-            <div>
-                {games.map(game => (
-                    <div key={game.id}>
-                        <h2>{game.name}</h2>
-                        {/* Other game details */}
-                    </div>
+                {genreOptions.map(genre => (
+                    <option key={genre.id} value={genre.id}>{genre.name}</option>
                 ))}
-            </div>
+            </select>
+
         </div>
     );
 };

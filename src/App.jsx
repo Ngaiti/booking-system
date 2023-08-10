@@ -1,4 +1,3 @@
-import Welcome from './pages/Welcome';
 import Home from './pages/Home';
 import Login from './pages/Login'
 import ErrorPage from './pages/Error';
@@ -20,6 +19,7 @@ import { FaEquals } from "react-icons/fa";
 import ProfileSideBar from './components/SideBar';
 import IconButton from './components/IconButton';
 import { useState } from 'react';
+import Explore from './pages/Explore';
 
 
 function Layout() {
@@ -35,7 +35,7 @@ function Layout() {
     }
   };
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Initially hidden
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -47,9 +47,9 @@ function Layout() {
       <Navbar bg="light" variant="light" className="bg-dark text-light">
         <Container>
           <IconButton
-            className="bi bi-list"
+            className="bi bi-grid-3x3-gap-fill"
             onClick={toggleSidebar}
-            style={{ marginRight: '10px' }}
+            isTop
           />
           <h3>Welcome sluts</h3>
           <NavDropdown title="Profile" id="basic-nav-dropdown">
@@ -82,7 +82,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="welcome" element={<Welcome />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
               <Route path="*" element={<ErrorPage />} />
@@ -92,6 +91,7 @@ function App() {
               <Route path="games" element={<DummyData />} />
               <Route path="games/:gameId" element={<GameDetails />} />
               <Route path="search" element={<SearchBar />} />
+              <Route path="explore" element={<Explore />} />
             </Route>
           </Routes>
         </BrowserRouter>

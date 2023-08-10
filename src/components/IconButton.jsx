@@ -6,22 +6,24 @@ export default function IconButton({
     className,
     onClick,
     text,
+    href
 }) {
     let margin;
 
     if (isTop) {
-        margin = `light rounded-pill`;
+        margin = ``;
     } else if (isBottom) {
-        margin = `light mt-auto rounded-pill`;
+        margin = ``;
     } else {
-        margin = `light rounded-pill`;
+        margin = ``;
     }
     const iconMargin = text ? " me-3" : " ";
+
     return (
-        <Button variant={margin} onClick={onClick}>
+        <Button variant={margin} onClick={onClick} href={href}>
             <i
                 className={className + iconMargin}
-                style={{ fontSize: "24px", color: isTop ? "dodgerblue" : "black" }}
+                style={{ fontSize: isBottom ? "60px" : "24px", color: isTop ? "white" : "black" }}
             ></i>
             {text}
         </Button>

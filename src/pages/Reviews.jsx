@@ -4,6 +4,7 @@ import { Container, Button, Card, ButtonGroup, Row, Col } from 'react-bootstrap'
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import ReviewCardModal from '../components/ReviewCardModal';
+import AuthWrapper from '../components/AuthWrapper';
 
 const API_URL = 'https://capstone-project.ngaiti.repl.co/reviews';
 
@@ -84,7 +85,12 @@ const Reviews = () => {
     // Fetch all bookings
     const fetchReviews = async () => {
         try {
-            const response = await axios.get(API_URL);
+            // Pass the user's user_id to the API call
+            const response = await axios.get(API_URL, {
+                params: {
+                    user_id: user.uid // Assuming user_id corresponds to Firebase UID
+                }
+            });
             setReviews(response.data.data);
         } catch (error) {
             console.error('Error:', error.message);
@@ -94,7 +100,16 @@ const Reviews = () => {
     // Create new review
     const createReview = async () => {
         try {
-            const response = await axios.post(API_URL, newReview);
+            const response = await axios.post(
+                API_URL,
+                newReview,
+                {
+                    headers: {
+                        'user-id': user.uid, // Send the authenticated user's UID
+                    }
+                }
+            );
+
             const createdReview = response.data.data;
             setReviews([...reviews, createdReview]);
             handleCloseModal();
@@ -137,59 +152,67 @@ const Reviews = () => {
     };
 
     useEffect(() => {
-        fetchReviews();
-    }, []);
+        if (user) {
+            fetchReviews();
+            console.log(user.uid)
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+        }
+    }, [user]);
+
     return (
-        <Container className="my-4">
-            <Row className="justify-content-center">
-                <Col xs={12} className="text-center">
-                    <h1>Reviews</h1>
-                    <Button variant="primary" onClick={() => handleOpenModal(null)}>
-                        Create New Review
-                    </Button>
-                    <Container>
-                        <Row xs={1} md={2} lg={3} className="g-4">
-                            {reviews.map((review, index) => (
-                                <Col key={index}>
-                                    <Card className="my-3 border-2">
-                                        <Card.Body>
-                                            <Card.Title>{review.title}</Card.Title>
-                                            <Card.Text>{review.content}</Card.Text>
-                                            <Card.Text>Date: {new Date(review.date).toLocaleDateString()}</Card.Text>
-                                            <div>
-                                                <strong>Rating:</strong> {review.rating} out of 10
-                                            </div>
-                                            <div className="d-flex justify-content-center align-items-center my-3">
-                                                <ButtonGroup aria-label="Basic example">
-                                                    <Button variant="secondary" onClick={() => handleOpenModal(review)}>
-                                                        <i className="bi bi-pencil"></i>
-                                                    </Button>
-                                                    <Button variant="secondary" onClick={() => deleteReview(review.id)}>
-                                                        <i className="bi bi-trash3"></i>
-                                                    </Button>
-                                                </ButtonGroup>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))}
-                        </Row>
-                    </Container>
-                    <ReviewCardModal
-                        show={showCreateModal || showUpdateModal}
-                        onClose={handleCloseModal}
-                        onSave={selectedReview ? updateReview : createReview}
-                        selectedReview={selectedReview}
-                        newReview={newReview}
-                        handleChange={handleChange}
-                    />
-                </Col>
-            </Row>
-        </Container>
+        <AuthWrapper>
+            <Container className="my-4">
+                <Row className="justify-content-center">
+                    <Col xs={12} className="text-center">
+                        <h1>Reviews</h1>
+                        <Button variant="primary" onClick={() => handleOpenModal(null)}>
+                            Create New Review
+                        </Button>
+                        <Container>
+                            <Row xs={1} md={2} lg={3} className="g-4">
+                                {reviews.map((review, index) => (
+                                    <Col key={index}>
+                                        <Card className="my-3 border-2">
+                                            <Card.Body>
+                                                <Card.Title>{review.title}</Card.Title>
+                                                <Card.Text>{review.content}</Card.Text>
+                                                <Card.Text>Date: {new Date(review.date).toLocaleDateString()}</Card.Text>
+                                                <div>
+                                                    <strong>Rating:</strong> {review.rating} out of 10
+                                                </div>
+                                                <div className="d-flex justify-content-center align-items-center my-3">
+                                                    <ButtonGroup aria-label="Basic example">
+                                                        <Button variant="secondary" onClick={() => handleOpenModal(review)}>
+                                                            <i className="bi bi-pencil"></i>
+                                                        </Button>
+                                                        <Button variant="secondary" onClick={() => deleteReview(review.id)}>
+                                                            <i className="bi bi-trash3"></i>
+                                                        </Button>
+                                                    </ButtonGroup>
+                                                </div>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Container>
+                        <ReviewCardModal
+                            show={showCreateModal || showUpdateModal}
+                            onClose={handleCloseModal}
+                            onSave={selectedReview ? updateReview : createReview}
+                            selectedReview={selectedReview}
+                            newReview={newReview}
+                            handleChange={handleChange}
+                        />
+                    </Col>
+                </Row>
+            </Container>
+            {reviews.length === 0 && (
+                <div className="d-flex justify-content-center align-items-center vh-100">
+                    <h1>Oopsies, there&apos;s nothing here.  🥺 </h1>
+                </div>
+            )}
+        </AuthWrapper>
     );
 };
 

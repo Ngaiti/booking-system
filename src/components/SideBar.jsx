@@ -17,7 +17,7 @@ export default function ProfileSideBar() {
                     style={{ position: 'sticky', top: 0 }}
                 >
                     <br />
-                    <IconButton className="bi bi-house" href="/" text="Home" />
+                    <IconButton className="bi bi-house" href="/home" text="Home" />
                     <IconButton className="bi bi-search" href="/explore " text="Explore" />
                     <IconButton className="bi bi-journal-text" text="Lists" />
                     <IconButton className="bi bi-bookmark" text="Bookmarks" />

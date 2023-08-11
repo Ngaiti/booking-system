@@ -20,6 +20,7 @@ import ProfileSideBar from './components/SideBar';
 import IconButton from './components/IconButton';
 import { useState } from 'react';
 import Explore from './pages/Explore';
+import Welcome from './pages/Welcome';
 
 
 function Layout() {
@@ -81,7 +82,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
+              <Route index element={<Welcome />} />
+              <Route path="home" element={<Home />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
               <Route path="*" element={<ErrorPage />} />

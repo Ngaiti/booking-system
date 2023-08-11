@@ -1,38 +1,16 @@
-import { useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap"
-import ProfileSideBar from "../components/SideBar";
-import Home from "./Home";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-
 function Welcome() {
-
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                setUser(user);
-            } else {
-                navigate('/login');
-            }
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, [navigate]);
-
-
-
     return (
-        <>
-            <Container>
-                <ProfileSideBar />
-                <Home />
-            </Container>
-        </>
-    );
+        <div className="welcome">
+            <div>
+                <div className='text-center'>
+                    <br />
+                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>
+                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/login">Login</Button>
+                </div>
+            </div>
+        </div>
+    )
 
 }
 

@@ -18,7 +18,7 @@ export default function ProfileSideBar() {
                 >
                     <br />
                     <IconButton className="bi bi-house" href="/home" text="Home" />
-                    <IconButton className="bi bi-search" href="/explore " text="Explore" />
+                    <IconButton className="bi bi-search" href="/search " text="Explore" />
                     <IconButton className="bi bi-journal-text" text="Lists" />
                     <IconButton className="bi bi-bookmark" text="Bookmarks" />
                     <IconButton className="bi bi-patch-check" text="Verified" />

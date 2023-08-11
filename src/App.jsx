@@ -52,7 +52,6 @@ function Layout() {
             onClick={toggleSidebar}
             isTop
           />
-          <h3>Welcome sluts</h3>
           <NavDropdown title="Profile" id="basic-nav-dropdown">
             <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>
             <NavDropdown.Item href="/reviews">Reviews</NavDropdown.Item>

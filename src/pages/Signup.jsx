@@ -7,6 +7,7 @@ import { auth } from "../firebase";
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     const [signupError, setSignupError] = useState(null);
 
     const navigate = useNavigate();
@@ -14,13 +15,31 @@ export default function Signup() {
     const handleSignup = async (e) => {
         e.preventDefault();
         try {
+            // Create user in Firebase Authentication
             await createUserWithEmailAndPassword(auth, email, password);
-            navigate('/home');
+
+            // Create user in your API
+            const response = await fetch('https://capstone-project.ngaiti.repl.co/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: auth.currentUser.uid, username, user_email: email })
+            });
+
+            if (response.ok) {
+                // User successfully created in both Firebase and your API
+                navigate('/home');
+            } else {
+                setSignupError("Error creating account. Please try again.");
+            }
         } catch (error) {
             setSignupError("Error creating account. Please try again.");
             console.error(error);
         }
     };
+
+
 
     return (
         <Container>
@@ -33,6 +52,15 @@ export default function Signup() {
                         placeholder="Enter email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group>

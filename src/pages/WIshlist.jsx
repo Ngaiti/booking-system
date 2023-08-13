@@ -12,19 +12,6 @@ export default function Wishlist() {
 
     const authContext = useContext(AuthContext); // Use the AuthContext
 
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                const userUID = user.uid;
-                fetchWishlist(userUID);
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
-
-
     const fetchWishlist = (userUID) => {
         axios
             .get(`https://capstone-project.ngaiti.repl.co/wishlist`, {
@@ -37,21 +24,25 @@ export default function Wishlist() {
                 const wishlistItems = response.data.data;
                 const gameIds = wishlistItems.map(item => item.game_id);
 
-                axios
-                    .get(`${BASE_URL}games`, {
-                        params: {
-                            key: API_KEY,
-                            ids: gameIds.join(','),
-                        },
-                    })
-                    .then((response) => {
-                        setFetchedGames(response.data.results);
-                    })
-                    .catch((error) => {
-                        console.error('Error fetching matching games:', error);
-                    });
+                if (gameIds.length === 0) {
+                    setShowNoGamesMessage(true); // Show no games message if no game ids to fetch
+                } else {
+                    axios
+                        .get(`${BASE_URL}games`, {
+                            params: {
+                                key: API_KEY,
+                                ids: gameIds.join(','),
+                            },
+                        })
+                        .then((response) => {
+                            setFetchedGames(response.data.results);
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching matching games:', error);
+                        });
 
-                setWishlistGames(wishlistItems);
+                    setWishlistGames(wishlistItems);
+                }
             })
             .catch((error) => {
                 console.error('Error fetching wishlist:', error);
@@ -72,17 +63,16 @@ export default function Wishlist() {
             });
     };
 
-
-
     useEffect(() => {
-        if (fetchedGames.length === 0) {
-            const timeoutId = setTimeout(() => {
-                setShowNoGamesMessage(true);
-            }, 3000);
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                const userUID = user.uid;
+                fetchWishlist(userUID);
+            }
+        });
 
-            return () => clearTimeout(timeoutId);
-        }
-    }, [fetchedGames]);
+        return () => unsubscribe();
+    }, []);
 
     return (
         <div>
@@ -90,9 +80,8 @@ export default function Wishlist() {
             {fetchedGames.length > 0 ? (
                 <GameCard games={fetchedGames} onDelete={handleDelete} showDeleteButton={true} />
             ) : (
-                showNoGamesMessage ? <p>No games in your wishlist.</p> : null
+                showNoGamesMessage ? <h1 className="d-flex justify-content-center align-items-center vh-100">  🥺 No games in your wishlist.</h1> : null
             )}
         </div>
     );
 }
-

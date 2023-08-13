@@ -27,6 +27,7 @@ const GameDetails = () => {
         };
 
         fetchGameDetails();
+        console.log(gameId)
     }, [gameId]);
 
     if (loading) {

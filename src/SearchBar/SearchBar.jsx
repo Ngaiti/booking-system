@@ -4,6 +4,7 @@ import { API_KEY, BASE_URL } from '../RAWG'; // Update the path to your API key 
 import { FaSearch } from "react-icons/fa";
 import GameCard from '../components/GameCard';
 import GameSortDropdown from '../components/GameSortDropdown';
+import PlatformDropdown from '../components/PlatformSortDropdown';
 
 
 function SearchBar() {
@@ -12,10 +13,11 @@ function SearchBar() {
   const [platforms, setPlatforms] = useState([]);
   const [games, setGames] = useState([]);
   const [sortBy, setSortBy] = useState('name');
+  const [selectedPlatform, setSelectedPlatform] = useState(null);
 
 
 
-
+  //fetch games
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}games`, {
@@ -31,12 +33,45 @@ function SearchBar() {
     }
   };
 
+  //fetch platforms
+  const fetchPlatforms = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}platforms`, {
+        params: {
+          key: API_KEY,
+        },
+      });
+
+      setPlatforms(response.data.results);
+    } catch (error) {
+      console.error('Error fetching platforms:', error);
+    }
+  };
+
+  const handleResetPlatform = () => {
+    setSelectedPlatform(null); // Reset the selected platform
+  };
+
+
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearch = () => {
     fetchData();
+  };
+
+
+  //filter by platform
+  const filterByPlatform = () => {
+    if (selectedPlatform) {
+      const filteredResults = results.filter((game) =>
+        game.platforms.some((platform) => platform.platform.name === selectedPlatform)
+      );
+      setResults(filteredResults);
+    } else {
+      fetchData();
+    }
   };
 
 
@@ -61,12 +96,27 @@ function SearchBar() {
 
   useEffect(() => {
     sortGames();
+    fetchPlatforms();
+    filterByPlatform();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
+
+  useEffect(() => {
+    filterByPlatform(); // Filter results based on selected platform
+  }, [selectedPlatform]); // Run the filter when selectedPlatform changes
+
 
   return (
     <div>
       <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+      <PlatformDropdown
+        platforms={platforms} // Pass the platforms to PlatformDropdown component
+        setSelectedPlatform={setSelectedPlatform}
+      />
+      <button onClick={handleResetPlatform} className="btn btn-secondary m-2">
+        Reset Platform
+      </button>
+
 
       <input
         type="text"

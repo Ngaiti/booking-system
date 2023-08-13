@@ -66,6 +66,7 @@ export default function Explore() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sortBy]);
 
+
     return (
         <>
             <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />

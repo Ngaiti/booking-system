@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import AuthWrapper from './AuthWrapper'; // Make sure to import your AuthWrapper component
+import AuthWrapper from './AuthWrapper';
+import Wishlist from './AddtoWishlist';
 
 function getPlatformIcon(platformId) {
     switch (platformId) {
@@ -18,7 +19,8 @@ function getPlatformIcon(platformId) {
     }
 }
 
-function GameCard({ games }) {
+function GameCard({ games, onDelete }) {
+
     return (
         <div>
             <AuthWrapper>
@@ -57,6 +59,11 @@ function GameCard({ games }) {
                                                     <span key={index}>{platform.platform.name}, </span>
                                                 ))}
                                             </p>
+                                            <span>
+                                                <button onClick={() => onDelete(game.id)} className="delete-button">
+                                                    Delete
+                                                </button>
+                                            </span>
                                         </div>
                                     </Card.Body>
                                 </Card>

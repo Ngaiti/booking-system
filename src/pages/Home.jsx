@@ -44,12 +44,16 @@ export default function Home() {
             });
     }, []);
 
-
+    useEffect(() => {
+        // Log game IDs when the games state changes
+        console.log("Game IDs:", games.map(game => game.id));
+    }, [games]);
 
     return (
         <div>
             <h1 className='text-center m-2'>Trending Now</h1>
             <GameCard games={games} />
+
         </div>
     );
 }

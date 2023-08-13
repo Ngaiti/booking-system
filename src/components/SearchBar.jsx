@@ -13,6 +13,12 @@ const SearchList = () => {
     const [metacriticOptions, setMetacriticOptions] = useState([]);
     const [genreOptions, setGenreOptions] = useState([]);
 
+    const validMetacriticFilter = metacriticOptions.some(option => option.value === metacriticFilter);
+
+    if (!validMetacriticFilter) {
+        setMetacriticFilter(''); // Reset to default
+    }
+
     useEffect(() => {
         // Fetch platforms
         axios

@@ -21,6 +21,7 @@ import IconButton from './components/IconButton';
 import { useState } from 'react';
 import Explore from './pages/Explore';
 import Welcome from './pages/Welcome';
+import Wishlist from './pages/WIshlist';
 
 
 function Layout() {
@@ -93,6 +94,8 @@ function App() {
               <Route path="games/:gameId" element={<GameDetails />} />
               <Route path="search" element={<SearchBar />} />
               <Route path="explore" element={<Explore />} />
+              <Route path="wishlist" element={<Wishlist />} />
+
             </Route>
           </Routes>
         </BrowserRouter>

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { API_KEY, BASE_URL } from '../RAWG';
 import './Gamelist.css'
 
 import GameCard from '../components/GameCard';
+import { AuthContext } from '../components/AuthProvider';
 
 
 export default function Home() {
@@ -11,6 +12,9 @@ export default function Home() {
 
     const [platforms, setPlatforms] = useState([]);
     const [games, setGames] = useState([]);
+
+    const authContext = useContext(AuthContext);
+
 
     useEffect(() => {
         // Fetch platforms
@@ -44,6 +48,24 @@ export default function Home() {
             });
     }, []);
 
+
+    const addToWishlist = (game_id) => {
+        const user_id = authContext.currentUser.uid;
+
+        axios
+            .post('https://capstone-project.ngaiti.repl.co/wishlist', {
+                user_id,
+                game_id,
+            })
+            .then(() => {
+                console.log('Game added to wishlist successfully');
+                // Optionally, you can update the local state to reflect the change
+            })
+            .catch((error) => {
+                console.error('Error adding game to wishlist:', error);
+            });
+    };
+
     useEffect(() => {
         // Log game IDs when the games state changes
         console.log("Game IDs:", games.map(game => game.id));
@@ -52,7 +74,7 @@ export default function Home() {
     return (
         <div>
             <h1 className='text-center m-2'>Trending Now</h1>
-            <GameCard games={games} />
+            <GameCard games={games} addToWishlist={addToWishlist} />
 
         </div>
     );

@@ -19,8 +19,8 @@ export default function ProfileSideBar() {
                     <br />
                     <IconButton className="bi bi-house" href="/home" text="Home" />
                     <IconButton className="bi bi-search" href="/search " text="Explore" />
-                    <IconButton className="bi bi-journal-text" text="Wishlists" />
-                    <IconButton className="bi bi-bookmark" text="Backlog" />
+                    <IconButton className="bi bi-journal-text" href="/reviews" text="Reviews" />
+                    <IconButton className="bi bi-bookmark" href="/wishlist" text="Your Wishlist" />
                     <IconButton className="bi bi-person" href="/profile" text="Profile" />
                     <IconButton className="bi bi-filter-circle" text="More" />
                 </Col>

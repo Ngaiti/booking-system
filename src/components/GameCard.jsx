@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import AuthWrapper from './AuthWrapper';
-import Wishlist from './AddtoWishlist';
 
 function getPlatformIcon(platformId) {
     switch (platformId) {
@@ -19,7 +18,9 @@ function getPlatformIcon(platformId) {
     }
 }
 
-function GameCard({ games, onDelete }) {
+
+function GameCard({ games, onDelete, showDeleteButton, addToWishlist }) {
+    console.log("addToWishlist function:", addToWishlist);
 
     return (
         <div>
@@ -59,11 +60,16 @@ function GameCard({ games, onDelete }) {
                                                     <span key={index}>{platform.platform.name}, </span>
                                                 ))}
                                             </p>
-                                            <span>
+                                            {showDeleteButton && (
                                                 <button onClick={() => onDelete(game.id)} className="delete-button">
                                                     Delete
                                                 </button>
-                                            </span>
+                                            )}
+                                            {!showDeleteButton && (
+                                                <button onClick={() => addToWishlist(game.id)} className="wishlist-button">
+                                                    Add to Wishlist
+                                                </button>
+                                            )}
                                         </div>
                                     </Card.Body>
                                 </Card>

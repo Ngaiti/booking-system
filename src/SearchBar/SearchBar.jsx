@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios'; // Make sure you have axios installed
 import { API_KEY, BASE_URL } from '../RAWG'; // Update the path to your API key and base URL
 import { FaSearch } from "react-icons/fa";
 import GameCard from '../components/GameCard';
 import GameSortDropdown from '../components/GameSortDropdown';
 import PlatformDropdown from '../components/PlatformSortDropdown';
+import { AuthContext } from '../components/AuthProvider';
 
 
 function SearchBar() {
@@ -14,6 +15,9 @@ function SearchBar() {
   const [games, setGames] = useState([]);
   const [sortBy, setSortBy] = useState('name');
   const [selectedPlatform, setSelectedPlatform] = useState(null);
+
+  const authContext = useContext(AuthContext);
+
 
 
 
@@ -74,6 +78,25 @@ function SearchBar() {
     }
   };
 
+  const addToWishlist = (game_id) => {
+    const user_id = authContext.currentUser.uid;
+
+    axios
+      .post('https://capstone-project.ngaiti.repl.co/wishlist', {
+        user_id,
+        game_id,
+      })
+      .then(() => {
+        console.log('Game added to wishlist successfully');
+        // Optionally, you can update the local state to reflect the change
+      })
+      .catch((error) => {
+        console.error('Error adding game to wishlist:', error);
+      });
+  };
+
+
+
 
   // Function to sort the games based on the current sortBy criteria
   const sortGames = () => {
@@ -106,6 +129,8 @@ function SearchBar() {
   }, [selectedPlatform]); // Run the filter when selectedPlatform changes
 
 
+
+
   return (
     <div>
       <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
@@ -130,7 +155,7 @@ function SearchBar() {
         onClick={handleSearch}
         style={{ marginRight: '10px', cursor: 'pointer' }}
       />
-      <GameCard games={results} />
+      <GameCard games={results} addToWishlist={addToWishlist} />
     </div>
   );
 }

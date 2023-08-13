@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { BASE_URL, API_KEY } from '../RAWG';
 import { auth } from '../firebase';
 import GameCard from '../components/GameCard';
+import { AuthContext } from '../components/AuthProvider';
 
 export default function Wishlist() {
     const [wishlistGames, setWishlistGames] = useState([]);
     const [fetchedGames, setFetchedGames] = useState([]);
     const [showNoGamesMessage, setShowNoGamesMessage] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null); // Store the user object
 
+    const authContext = useContext(AuthContext); // Use the AuthContext
 
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                setCurrentUser(user); // Set the current user object
                 const userUID = user.uid;
                 fetchWishlist(userUID);
             }
@@ -58,13 +58,12 @@ export default function Wishlist() {
             });
     };
 
-    const handleDelete = (user_id, item_id) => {
-        console.log('Deleting item:', user_id, item_id);
+    const handleDelete = (item_id) => {
+        console.log('Deleting item:', authContext.currentUser.uid, item_id);
         axios
-            .delete(`https://capstone-project.ngaiti.repl.co/wishlist/${user_id}/${item_id}`)
+            .delete(`https://capstone-project.ngaiti.repl.co/wishlist/${authContext.currentUser.uid}/${item_id}`)
             .then(() => {
                 console.log('Item deleted successfully');
-                // Update the wishlist games after deletion
                 setWishlistGames(prevWishlist => prevWishlist.filter(item => item.id !== item_id));
                 window.location.reload();
             })
@@ -72,6 +71,8 @@ export default function Wishlist() {
                 console.error('Error deleting wishlist item:', error);
             });
     };
+
+
 
     useEffect(() => {
         if (fetchedGames.length === 0) {
@@ -87,7 +88,7 @@ export default function Wishlist() {
         <div>
             <h1 className='text-center m-2'>Your Wishlist</h1>
             {fetchedGames.length > 0 ? (
-                <GameCard games={fetchedGames} onDelete={(item_id) => handleDelete(currentUser.uid, item_id)} />
+                <GameCard games={fetchedGames} onDelete={handleDelete} showDeleteButton={true} />
             ) : (
                 showNoGamesMessage ? <p>No games in your wishlist.</p> : null
             )}

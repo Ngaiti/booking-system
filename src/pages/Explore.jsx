@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { API_KEY, BASE_URL } from '../RAWG';
 import './Gamelist.css';
 import GameCard from '../components/GameCard';
 import GameSortDropdown from '../components/GameSortDropdown';
+import { AuthContext } from '../components/AuthProvider';
 
 export default function Explore() {
     const [platforms, setPlatforms] = useState([]);
     const [games, setGames] = useState([]);
     const [sortBy, setSortBy] = useState('name');
+
+    const authContext = useContext(AuthContext);
+
 
     useEffect(() => {
         // Fetch platforms
@@ -61,6 +65,24 @@ export default function Explore() {
         setGames(sortedArray);
     };
 
+    const addToWishlist = (game_id) => {
+        const user_id = authContext.currentUser.uid;
+
+        axios
+            .post('https://capstone-project.ngaiti.repl.co/wishlist', {
+                user_id,
+                game_id,
+            })
+            .then(() => {
+                console.log('Game added to wishlist successfully');
+                // Optionally, you can update the local state to reflect the change
+            })
+            .catch((error) => {
+                console.error('Error adding game to wishlist:', error);
+            });
+    };
+
+
     useEffect(() => {
         sortGames();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +92,7 @@ export default function Explore() {
     return (
         <>
             <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
-            <GameCard games={games} />
+            <GameCard games={games} addToWishlist={addToWishlist} />
         </>
     );
 }

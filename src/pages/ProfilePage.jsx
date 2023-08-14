@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Container, Row, Col, Image, Form } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { AuthContext } from '../components/AuthProvider';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ const ProfilePage = () => {
     const [username, setUsername] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [description, setDescription] = useState('');
+    const [editingUsername, setEditingUsername] = useState(false);
+    const [editingDescription, setEditingDescription] = useState(false);
 
     const fetchUserData = (userId) => {
         console.log('Fetching user data for user ID:', userId); // Log the user ID
@@ -29,6 +31,7 @@ const ProfilePage = () => {
                 console.error('Error fetching user data:', error);
             });
     };
+
 
     const fetchProfileImageUrl = async () => {
         if (authContext.currentUser) {
@@ -53,6 +56,38 @@ const ProfilePage = () => {
                 .catch((error) => {
                     console.error('Error uploading profile picture:', error);
                 });
+        }
+    };
+
+    const handleEditUsername = () => {
+        setEditingUsername(true);
+    };
+
+    const handleSaveUsername = async () => {
+        try {
+            // Make API request to update username
+            await axios.put(`https://capstone-project.ngaiti.repl.co/users/${authContext.currentUser.uid}`, {
+                username: username
+            });
+            setEditingUsername(false);
+        } catch (error) {
+            console.error('Error updating username:', error);
+        }
+    };
+
+    const handleEditDescription = () => {
+        setEditingDescription(true);
+    };
+
+    const handleSaveDescription = async () => {
+        try {
+            // Make API request to update description
+            await axios.put(`https://capstone-project.ngaiti.repl.co/users/${authContext.currentUser.uid}`, {
+                description: description
+            });
+            setEditingDescription(false);
+        } catch (error) {
+            console.error('Error updating description:', error);
         }
     };
 
@@ -87,7 +122,21 @@ const ProfilePage = () => {
                     </div>
                     <div>
                         <h3>Username:</h3>
-                        <p>{username}</p>
+                        {editingUsername ? (
+                            <div>
+                                <Form.Control
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveUsername}>Save</Button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p>{username}</p>
+                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleEditUsername}>Edit</Button>
+                            </div>
+                        )}
                     </div>
                     <div>
                         <h3>Email:</h3>
@@ -95,7 +144,21 @@ const ProfilePage = () => {
                     </div>
                     <div>
                         <h3>Description:</h3>
-                        <p>{description}</p>
+                        {editingDescription ? (
+                            <div>
+                                <Form.Control
+                                    as="textarea"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveDescription}>Save</Button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p>{description}</p>
+                                <Button variant="btn btn-outline-dark" onClick={handleEditDescription}>Edit</Button>
+                            </div>
+                        )}
                     </div>
                 </Col>
             </Row>

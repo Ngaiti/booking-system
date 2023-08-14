@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import AuthWrapper from './AuthWrapper';
 
 function getPlatformIcon(platformId) {
@@ -61,14 +61,14 @@ function GameCard({ games, onDelete, showDeleteButton, addToWishlist }) {
                                                 ))}
                                             </p>
                                             {showDeleteButton && (
-                                                <button onClick={() => onDelete(game.id)} className="delete-button">
+                                                <Button variant="btn btn-outline-danger" onClick={() => onDelete(game.id)}>
                                                     Delete
-                                                </button>
+                                                </Button>
                                             )}
                                             {!showDeleteButton && (
-                                                <button onClick={() => addToWishlist(game.id)} className="wishlist-button">
+                                                <Button variant="btn btn-outline-success" onClick={() => addToWishlist(game.id)}>
                                                     Add to Wishlist
-                                                </button>
+                                                </Button>
                                             )}
                                         </div>
                                     </Card.Body>

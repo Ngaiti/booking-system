@@ -1,142 +1,142 @@
-import { useState } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
-import { storage } from "../firebase";
+import { useState, useEffect, useContext } from 'react';
+import { storage } from '../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Button, Container, Row, Col, Image, Form } from 'react-bootstrap';
+import { auth } from '../firebase';
+import { AuthContext } from '../components/AuthProvider'; // Import your AuthContext
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const ProfilePage2 = () => {
-    const [progress, setProgress] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-    const [file, setFile] = useState(null);
-    const [url, setUrl] = useState(null);
-    const [username, setUsername] = useState("John Doe");
-    const [description, setDescription] = useState(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tincidunt risus."
-    );
-    const [isEditingUsername, setIsEditingUsername] = useState(false);
-    const [isEditingDescription, setIsEditingDescription] = useState(false);
-    const [isEditingImage, setIsEditingImage] = useState(false);
+const ProfilePage = () => {
+    const authContext = useContext(AuthContext); // Use the AuthContext
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [profileImageUrl, setProfileImageUrl] = useState('');
+    const [username, setUsername] = useState('');
+    const [briefDescription, setBriefDescription] = useState('');
+    const [editingUsername, setEditingUsername] = useState(false);
+    const [editingDescription, setEditingDescription] = useState(false);
+    const navigate = useNavigate();
 
-    const onFileUpload = () => {
-        if (!file) return;
-        setIsLoading(true);
-        const storageRef = ref(storage, `/files/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress = Math.round(
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                );
-                setProgress(progress);
-            },
-            (err) => {
-                console.log(err);
-                setIsLoading(false);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    setUrl(url);
-                    setIsLoading(false);
-                });
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user);
+                setUsername(user.displayName || ''); // Set the username from user's display name
+                fetchProfileImageUrl();
+                fetchUserData(user.uid); // Pass the UID to the function
+            } else {
+                navigate('/login');
             }
-        );
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, [navigate]);
+
+    const fetchProfileImageUrl = async () => {
+        try {
+            if (authContext.currentUser) {
+                const profileImageRef = ref(storage, `profile-pics/${authContext.currentUser.uid}.jpeg`);
+                const downloadURL = await getDownloadURL(profileImageRef);
+                setProfileImageUrl(downloadURL);
+            }
+        } catch (error) {
+            console.error('Error fetching profile image URL:', error);
+        }
+    }
+
+    const fetchUserData = (userId) => {
+        axios
+            .get(`https://capstone-project.ngaiti.repl.co/users/${userId}`)
+            .then((response) => {
+                const userData = response.data;
+                setUsername(userData.username);
+                setBriefDescription(userData.email); // Assuming the API response includes an 'email' field
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
     };
 
-    const onFileChange = (e) => {
-        setFile(e.target.files[0]);
-        e.preventDefault();
+
+    const handleProfilePictureChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const profileImageRef = ref(storage, `profile-pics/${user.uid}.jpeg`);
+            uploadBytes(profileImageRef, file).then(() => {
+                fetchProfileImageUrl();
+            }).catch((error) => {
+                console.error('Error uploading profile picture:', error);
+            });
+        }
     };
 
-    const handleEditUsername = () => {
-        setIsEditingUsername(true);
+    const handleUsernameEdit = () => {
+        setEditingUsername(true);
     };
 
-    const handleEditDescription = () => {
-        setIsEditingDescription(true);
-    };
-
-    const handleEditImage = () => {
-        setIsEditingImage(true);
+    const handleDescriptionEdit = () => {
+        setEditingDescription(true);
     };
 
     const handleSaveUsername = () => {
-        setIsEditingUsername(false);
+        setEditingUsername(false);
     };
 
     const handleSaveDescription = () => {
-        setIsEditingDescription(false);
-    };
-
-    const handleSaveImage = () => {
-        setIsEditingImage(false);
-        setFile(null);
-        setProgress(0);
-        setUrl(null);
+        setEditingDescription(false);
     };
 
     return (
-        <>
-            <div>
-                {isEditingImage ? (
-                    <>
-                        <input type="file" onChange={onFileChange} />
-                        <button onClick={onFileUpload}>Upload Image</button>
-                        {isLoading && (
-                            <p>
-                                File upload <b>{progress}%</b>
-                            </p>
+        <Container className="my-4">
+            <h1 className="text-center">Profile Page</h1>
+            <Row className="justify-content-center">
+                <Col xs={12} sm={6} className="text-center">
+                    <Image src={profileImageUrl} alt="Profile" roundedCircle style={{ width: '300px', height: '300px' }} />
+                    <div>
+                        {editingUsername ? (
+                            <div>
+                                <Form.Control
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    className="mb-2"
+                                />
+                                <Button variant="outline-primary" onClick={handleSaveUsername}>Save</Button>
+                            </div>
+                        ) : (
+                            <div>
+                                <h2>{username}</h2>
+                                <Button variant="outline-dark" onClick={handleUsernameEdit} className="mb-2">Edit Username</Button>
+                            </div>
                         )}
-                        {url && (
-                            <img
-                                src={url}
-                                alt="Uploaded"
-                                className="img-fluid"
-                            />
+                    </div>
+                    <div>
+                        {editingDescription ? (
+                            <div>
+                                <Form.Control
+                                    as="textarea"
+                                    value={briefDescription}
+                                    onChange={(e) => setBriefDescription(e.target.value)}
+                                    rows={4}
+                                    className="mb-2"
+                                />
+                                <Button variant="outline-primary" onClick={handleSaveDescription}>Save</Button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p>{briefDescription}</p>
+                                <Button variant="outline-dark" onClick={handleDescriptionEdit} className="mb-2">Edit Description</Button>
+                            </div>
                         )}
-                        <button onClick={handleSaveImage}>Save Image</button>
-                    </>
-                ) : (
-                    <>
-                        <img src={url} alt="Profile" className="img-fluid" />
-                        <button onClick={handleEditImage}>Edit Image</button>
-                    </>
-                )}
-            </div>
-            <div>
-                {isEditingUsername ? (
-                    <>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <button onClick={handleSaveUsername}>Save</button>
-                    </>
-                ) : (
-                    <>
-                        <h3>{username}</h3>
-                        <button onClick={handleEditUsername}>Edit</button>
-                    </>
-                )}
-            </div>
-            <div>
-                {isEditingDescription ? (
-                    <>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                        <button onClick={handleSaveDescription}>Save</button>
-                    </>
-                ) : (
-                    <>
-                        <p>{description}</p>
-                        <button onClick={handleEditDescription}>Edit</button>
-                    </>
-                )}
-            </div>
-        </>
+                    </div>
+                    <div>
+                        <Form.Control type="file" accept="image/*" onChange={handleProfilePictureChange} className="my-3" />
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
-export default ProfilePage2;
+export default ProfilePage;

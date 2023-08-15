@@ -23,9 +23,9 @@ export default function IconButton({
         <Button variant={margin} onClick={onClick} href={href}>
             <i
                 className={className + iconMargin}
-                style={{ fontSize: isBottom ? "60px" : "24px", color: isTop ? "white" : "black" }}
+                style={{ fontSize: isBottom ? "60px" : "24px", color: "white" }}
             ></i>
-            {text}
+            <span className={"text-white"}>{text}</span>
         </Button>
     );
 }

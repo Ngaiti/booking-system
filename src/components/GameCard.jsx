@@ -25,11 +25,11 @@ function GameCard({ games, onDelete, showDeleteButton, addToWishlist }) {
     return (
         <div>
             <AuthWrapper>
-                <Container className="my-4">
+                <Container className="my-4 ">
                     <Row xs={1} md={2} lg={4} className="g-4">
                         {games.map((game) => (
                             <Col key={game.id}>
-                                <Card className="game-card">
+                                <Card className="border border-secondary rounded shadow game-card">
                                     <Link to={`/games/${game.id}`}>
                                         {game.background_image && (
                                             <Card.Img

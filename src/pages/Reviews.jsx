@@ -33,7 +33,6 @@ const Reviews = () => {
     // const [showModal, setShowModal] = useState(false);
     const [newReview, setNewReview] = useState({
         title: '',
-        author: '',
         date: '',
         content: '',
         rating: ''
@@ -165,18 +164,18 @@ const Reviews = () => {
                 <Row className="justify-content-center">
                     <Col xs={12} className="text-center">
                         <h1>Reviews</h1>
-                        <Button variant="primary" onClick={() => handleOpenModal(null)}>
+                        <Button variant="btn btn-outline-dark" onClick={() => handleOpenModal(null)}>
                             Create New Review
                         </Button>
                         <Container>
-                            <Row xs={1} md={2} lg={3} className="g-4">
+                            <Row xs={1} md={2} lg={2} className="g-4">
                                 {reviews.map((review, index) => (
                                     <Col key={index}>
                                         <Card className="my-3 border-2">
                                             <Card.Body>
                                                 <Card.Title>{review.title}</Card.Title>
                                                 <Card.Text>{review.content}</Card.Text>
-                                                <Card.Text>Date: {new Date(review.date).toLocaleDateString()}</Card.Text>
+                                                <Card.Text> <strong>Date:</strong> {new Date(review.date).toLocaleDateString()}</Card.Text>
                                                 <div>
                                                     <strong>Rating:</strong> {review.rating} out of 10
                                                 </div>

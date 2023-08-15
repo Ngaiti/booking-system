@@ -120,7 +120,6 @@ function SearchBar() {
   useEffect(() => {
     sortGames();
     fetchPlatforms();
-    filterByPlatform();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
@@ -132,31 +131,25 @@ function SearchBar() {
 
 
   return (
-    <div>
-      <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
-      <PlatformDropdown
-        platforms={platforms} // Pass the platforms to PlatformDropdown component
-        setSelectedPlatform={setSelectedPlatform}
-      />
-      <button onClick={handleResetPlatform} className="btn btn-secondary m-2">
-        Reset Platform
-      </button>
+    <>
+      <div className="d-flex align-items-center justify-content-center m-5 ">
 
-
-      <input
-        type="text"
-        placeholder="Search for games"
-        value={searchTerm}
-        onChange={handleInputChange}
-      />
-      <FaSearch
-        className="mx-3"
-        id="search-icon"
-        onClick={handleSearch}
-        style={{ marginRight: '10px', cursor: 'pointer' }}
-      />
+        <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+        <input
+          type="text"
+          placeholder="Search for games"
+          value={searchTerm}
+          onChange={handleInputChange}
+        />
+        <FaSearch
+          className="mx-3"
+          id="search-icon"
+          onClick={handleSearch}
+          style={{ marginRight: '10px', cursor: 'pointer' }}
+        />
+      </div>
       <GameCard games={results} addToWishlist={addToWishlist} />
-    </div>
+    </>
   );
 }
 

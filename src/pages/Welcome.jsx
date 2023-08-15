@@ -1,17 +1,24 @@
-import { Button, Container, Row } from "react-bootstrap"
+import { Button, Col, Container, Row } from "react-bootstrap";
+
 function Welcome() {
     return (
-        <div className="welcome">
-            <div>
-                <div className='text-center'>
-                    <br />
-                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/signup">Signup</Button>
-                    <Button size="lg" className="m-5" variant="btn btn-outline-dark" href="/login">Login</Button>
-                </div>
-            </div>
-        </div>
-    )
+        <div className="d-flex align-items-center justify-content-center vh-100">
+            <Container>
+                <Row className="justify-content-center ">
+                    <Col xs={12} md={7} lg={5} className="text-center border border-5 border-dark rounded p-4 shadow ">
+                        <h1 className="my-3">Let&apos;s get started!</h1>
 
+                        <Button size="lg" className="m-5" variant="outline-dark" href="/signup">
+                            Signup
+                        </Button>
+                        <Button size="lg" className="m-5" variant="outline-dark" href="/login">
+                            Login
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    );
 }
 
-export default Welcome
+export default Welcome;

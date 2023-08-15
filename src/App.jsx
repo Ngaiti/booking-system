@@ -95,7 +95,6 @@ function App() {
               <Route path="search" element={<SearchBar />} />
               <Route path="explore" element={<Explore />} />
               <Route path="wishlist" element={<Wishlist />} />
-
             </Route>
           </Routes>
         </BrowserRouter>

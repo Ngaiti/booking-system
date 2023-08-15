@@ -18,15 +18,7 @@ export default function ReviewCardModal({ show, onClose, onSave, selectedReview,
                             onChange={handleChange}
                         />
                     </Form.Group>
-                    <Form.Group controlId="formAuthor">
-                        <Form.Label>Author</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="author"
-                            value={newReview.author}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
+
                     <Form.Group controlId="formDate">
                         <Form.Label>Date</Form.Label>
                         <Form.Control
@@ -61,7 +53,7 @@ export default function ReviewCardModal({ show, onClose, onSave, selectedReview,
                 <Button variant="btn btn-outline-secondary" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button variant="outline-primary" onClick={selectedReview ? onSave : onSave}>
+                <Button variant="btn btn-outline-info" onClick={selectedReview ? onSave : onSave}>
                     {selectedReview ? 'Update Review' : 'Create Review'}
                 </Button>
             </Modal.Footer>

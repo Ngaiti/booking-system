@@ -59,7 +59,6 @@ export default function Home() {
             })
             .then(() => {
                 console.log('Game added to wishlist successfully');
-                // Optionally, you can update the local state to reflect the change
             })
             .catch((error) => {
                 console.error('Error adding game to wishlist:', error);
@@ -67,13 +66,12 @@ export default function Home() {
     };
 
     useEffect(() => {
-        // Log game IDs when the games state changes
         console.log("Game IDs:", games.map(game => game.id));
     }, [games]);
 
     return (
         <div>
-            <h1 className='text-center m-2'>Trending Now</h1>
+            <h1 className='text-center m-5'>Trending Now</h1>
             <GameCard games={games} addToWishlist={addToWishlist} />
 
         </div>

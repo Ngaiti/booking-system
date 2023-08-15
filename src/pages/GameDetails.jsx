@@ -42,44 +42,43 @@ const GameDetails = () => {
     };
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    {/* Background Images */}
-                    {game.background_image && (
-                        <div className="d-flex justify-content-center">
-                            <img
-                                src={game.background_image}
-                                alt={game.name}
-                                style={{ maxWidth: '850px', height: 'auto' }} // Adjust the maxWidth to resize the image
-                            />
-                        </div>
-                    )}
+        <div className="d-flex justify-content-center m-5">
+            <Container>
+                <Row xs={1}>
+                    <Col>
+                        {game.background_image && (
+                            <div className="d-flex justify-content-center">
+                                <img
+                                    src={game.background_image}
+                                    alt={game.name}
+                                    style={{ maxWidth: '80%', height: 'auto' }}
+                                    className=' border border-1 border-dark rounded shadow mb-5'
+                                />
+                            </div>
+                        )}
 
-                </Col>
-            </Row>
-            <Row className="mt-4">
-                <Col>
-                    <h1>{game.name}</h1>
-                    <GameDescription description={game.description} />
-                    <p>Released: {game.released}</p>
-                    <p>Metacritic rating: {game.metacritic}</p>
-                    <p>Metacritic rating: {game.metacritic}</p>
-                    <p>Metacritic rating: {game.metacritic}</p>
+                    </Col>
+                </Row>
+                <Row xs={1} lg={2} className="mr-2">
+                    <Col>
+                        <h1>{game.name}</h1>
+                        <GameDescription description={game.description} />
 
-                </Col>
-            </Row>
-            <Row className="mt-4">
-                <Col>
-                    <h2>Platforms</h2>
-                    <ul>
-                        {game.platforms.map((platform, index) => (
-                            <li key={index}>{platform.platform.name}</li>
-                        ))}
-                    </ul>
-                </Col>
-            </Row>
-        </Container>
+                    </Col>
+                    <Col>
+                        <h1>Platforms</h1>
+                        <ul>
+                            {game.platforms.map((platform, index) => (
+                                <li key={index}>{platform.platform.name}</li>
+                            ))}
+                        </ul>
+                        <h2>Released:</h2> <p>{game.released}</p>
+                        <h2>Metacritic rating:</h2> {game.metacritic}
+
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 

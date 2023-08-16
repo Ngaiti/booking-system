@@ -75,7 +75,7 @@ export default function Wishlist() {
     }, []);
 
     return (
-        <div>
+        <div className='m-5'>
             <h1 className='text-center m-2'>Your Wishlist</h1>
             {fetchedGames.length > 0 ? (
                 <GameCard games={fetchedGames} onDelete={handleDelete} showDeleteButton={true} />

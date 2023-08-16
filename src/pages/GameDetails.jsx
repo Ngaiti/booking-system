@@ -42,21 +42,18 @@ const GameDetails = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center m-5">
+        <div className="d-flex justify-content-center m-4">
             <Container>
                 <Row xs={1}>
                     <Col>
-                        {game.background_image && (
-                            <div className="d-flex justify-content-center">
-                                <img
-                                    src={game.background_image}
-                                    alt={game.name}
-                                    style={{ maxWidth: '80%', height: 'auto' }}
-                                    className=' border border-1 border-dark rounded shadow mb-5'
-                                />
-                            </div>
-                        )}
-
+                        <div className="d-flex justify-content-center slideshow-container">
+                            <img
+                                src={game.background_image}
+                                alt={game.name}
+                                style={{ maxWidth: '80%', height: 'auto' }}
+                                className=' border border-1 border-dark rounded shadow mb-5'
+                            />
+                        </div>
                     </Col>
                 </Row>
                 <Row xs={1} lg={2} className="mr-2">

@@ -154,17 +154,16 @@ const Reviews = () => {
         if (user) {
             fetchReviews();
             console.log(user.uid)
-
         }
     }, [user]);
 
     return (
         <AuthWrapper>
-            <Container className="my-4">
+            <Container className="m-5">
                 <Row className="justify-content-center">
                     <Col xs={12} className="text-center">
-                        <h1>Reviews</h1>
-                        <Button variant="btn btn-outline-dark" onClick={() => handleOpenModal(null)}>
+                        <h1 className='m-2'>Reviews</h1>
+                        <Button variant="btn btn-outline-dark" className='m-2' onClick={() => handleOpenModal(null)}>
                             Create New Review
                         </Button>
                         <Container>
@@ -206,11 +205,7 @@ const Reviews = () => {
                     </Col>
                 </Row>
             </Container>
-            {reviews.length === 0 && (
-                <div className="d-flex justify-content-center align-items-center vh-100">
-                    <h1>Oopsies, there&apos;s nothing here.  🥺 </h1>
-                </div>
-            )}
+
         </AuthWrapper>
     );
 };

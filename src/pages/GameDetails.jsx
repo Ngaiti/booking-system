@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_KEY, BASE_URL } from '../RAWG';
 import { useParams } from 'react-router-dom';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Carousel, CarouselItem, Col, Container, Row } from 'react-bootstrap';
 
 const GameDetails = () => {
     const { gameId } = useParams();
@@ -31,7 +31,7 @@ const GameDetails = () => {
     }, [gameId]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div></div>;
     }
 
     const GameDescription = ({ description }) => {
@@ -46,13 +46,25 @@ const GameDetails = () => {
             <Container>
                 <Row xs={1}>
                     <Col>
-                        <div className="d-flex justify-content-center slideshow-container">
-                            <img
-                                src={game.background_image}
-                                alt={game.name}
-                                style={{ maxWidth: '80%', height: 'auto' }}
-                                className=' border border-1 border-dark rounded shadow mb-5'
-                            />
+                        <div className="d-flex justify-content-center">
+                            <Carousel style={{ maxWidth: '75%' }}>
+                                <Carousel.Item>
+                                    <img
+                                        src={game.background_image}
+                                        alt={game.name}
+                                        className="d-block mx-auto border border-1 border-dark rounded shadow mb-5"
+                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                    />
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img
+                                        src={game.background_image_additional}
+                                        alt={game.name}
+                                        className="d-block mx-auto border border-1 border-dark rounded shadow mb-5"
+                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                    />
+                                </Carousel.Item>
+                            </Carousel>
                         </div>
                     </Col>
                 </Row>

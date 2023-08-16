@@ -36,8 +36,8 @@ export default function Home() {
             .get(`${BASE_URL}games`, {
                 params: {
                     key: API_KEY,
-                    dates: '2023-06-01,2023-06-30',
-                    platforms: '187',
+                    dates: '2023-07-01,2023-07-30',
+                    // platforms: '187',
                 },
             })
             .then((response) => {
@@ -71,7 +71,7 @@ export default function Home() {
 
     return (
         <div>
-            <h1 className='text-center m-5'>Trending Now</h1>
+            <h1 className='text-center m-5'>What&apos;s New</h1>
             <GameCard games={games} addToWishlist={addToWishlist} />
 
         </div>

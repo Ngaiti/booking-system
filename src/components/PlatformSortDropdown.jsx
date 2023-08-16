@@ -1,7 +1,7 @@
 import { Dropdown } from 'react-bootstrap';
 
-export default function PlatformDropdown({ platforms, setSelectedPlatform }) {
-    const firstEightPlatforms = platforms.slice(0, 8); // Select the first 8 platforms
+export default function PlatformDropdown({ platforms, setSelectedPlatform, handleResetPlatform }) {
+    const firstEightPlatforms = platforms.slice(0, 8);
 
     return (
         <Dropdown className='m-3'>

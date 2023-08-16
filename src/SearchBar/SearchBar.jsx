@@ -135,6 +135,7 @@ function SearchBar() {
       <div className="d-flex align-items-center justify-content-center m-5 ">
 
         <GameSortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+        <PlatformDropdown platforms={platforms} setSelectedPlatform={setSelectedPlatform} handleResetPlatform={handleResetPlatform} />
         <input
           type="text"
           placeholder="Search for games"

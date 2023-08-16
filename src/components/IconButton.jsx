@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 export default function IconButton({
     isTop,
     isBottom,
+
     className,
     onClick,
     text,
@@ -23,7 +24,7 @@ export default function IconButton({
         <Button variant={margin} onClick={onClick} href={href}>
             <i
                 className={className + iconMargin}
-                style={{ fontSize: isBottom ? "60px" : "24px", color: "white" }}
+                style={{ fontSize: isBottom ? "60px" : "24px", color: isBottom ? "black" : "white" }}
             ></i>
             <span className={"text-white"}>{text}</span>
         </Button>

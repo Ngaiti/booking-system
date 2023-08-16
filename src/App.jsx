@@ -51,7 +51,6 @@ function Layout() {
           <IconButton
             className="bi bi-grid-3x3-gap-fill"
             onClick={toggleSidebar}
-            isTop
           />
           <NavDropdown title="Profile" id="basic-nav-dropdown">
             <NavDropdown.Item href="/profile">Your Profile</NavDropdown.Item>

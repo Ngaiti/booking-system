@@ -81,9 +81,9 @@ const ProfilePage = () => {
         setEditingDescription(true);
     };
 
+    // Make API request to update description
     const handleSaveDescription = async () => {
         try {
-            // Make API request to update description
             await axios.put(`https://capstone-project.ngaiti.repl.co/users/${authContext.currentUser.uid}`, {
                 description: description
             });

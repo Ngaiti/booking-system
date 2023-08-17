@@ -46,7 +46,6 @@ export default function Explore() {
             });
     }, []);
 
-    // Function to sort the games based on the current sortBy criteria
     const sortGames = () => {
         let sortedArray = [];
 
@@ -75,7 +74,6 @@ export default function Explore() {
             })
             .then(() => {
                 console.log('Game added to wishlist successfully');
-                // Optionally, you can update the local state to reflect the change
             })
             .catch((error) => {
                 console.error('Error adding game to wishlist:', error);

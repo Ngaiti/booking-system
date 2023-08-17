@@ -5,6 +5,10 @@
             "dest": "/"
         },
         {
+            "src": "/welcome",
+            "dest": "/"
+        },
+        {
             "src": "/login",
             "dest": "/"
         },
@@ -30,6 +34,22 @@
         },
         {
             "src": "/search",
+            "dest": "/"
+        },
+        {
+            "src": "/games",
+            "dest": "/"
+        },
+        {
+            "src": "/games/:gamesId",
+            "dest": "/"
+        },
+        {
+            "src": "/explore",
+            "dest": "/"
+        },
+        {
+            "src": "/wishlist",
             "dest": "/"
         }
     ]

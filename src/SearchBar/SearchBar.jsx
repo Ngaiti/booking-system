@@ -12,9 +12,10 @@ function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [platforms, setPlatforms] = useState([]);
-  const [games, setGames] = useState([]);
   const [sortBy, setSortBy] = useState('name');
   const [selectedPlatform, setSelectedPlatform] = useState(null);
+  const [filteredResults, setFilteredResults] = useState(results);
+
 
   const authContext = useContext(AuthContext);
 
@@ -72,9 +73,9 @@ function SearchBar() {
       const filteredResults = results.filter((game) =>
         game.platforms.some((platform) => platform.platform.name === selectedPlatform)
       );
-      setResults(filteredResults);
+      setFilteredResults(filteredResults);
     } else {
-      fetchData();
+      setFilteredResults(results);
     }
   };
 
@@ -118,16 +119,20 @@ function SearchBar() {
   };
 
   useEffect(() => {
+    fetchData();
+    fetchPlatforms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     sortGames();
     fetchPlatforms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
   useEffect(() => {
-    filterByPlatform(); // Filter results based on selected platform
-  }, [selectedPlatform]); // Run the filter when selectedPlatform changes
-
-
+    filterByPlatform();
+  }, [filterByPlatform, results, selectedPlatform, sortBy]);
 
 
   return (
@@ -149,7 +154,7 @@ function SearchBar() {
           style={{ marginRight: '10px', cursor: 'pointer' }}
         />
       </div>
-      <GameCard games={results} addToWishlist={addToWishlist} />
+      <GameCard games={filteredResults} addToWishlist={addToWishlist} />
     </>
   );
 }

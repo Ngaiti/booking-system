@@ -4,6 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { AuthContext } from '../components/AuthProvider';
 import axios from 'axios';
+import AuthWrapper from '../components/AuthWrapper';
 
 const ProfilePage = () => {
     const authContext = useContext(AuthContext);
@@ -16,13 +17,13 @@ const ProfilePage = () => {
     const [editingDescription, setEditingDescription] = useState(false);
 
     const fetchUserData = (userId) => {
-        console.log('Fetching user data for user ID:', userId); // Log the user ID
+        console.log('Fetching user data for user ID:', userId);
 
         axios
             .get(`https://capstone-project.ngaiti.repl.co/users/${userId}`)
             .then((response) => {
                 const userData = response.data.data;
-                console.log('Fetched user data:', userData); // Log the fetched user data
+                console.log('Fetched user data:', userData);
                 setUsername(userData.username);
                 setUserEmail(userData.user_email);
                 setDescription(userData.description);
@@ -32,7 +33,7 @@ const ProfilePage = () => {
             });
     };
 
-
+    //Firestore request to fetch profile picture from current userid
     const fetchProfileImageUrl = async () => {
         if (authContext.currentUser) {
             try {
@@ -63,9 +64,10 @@ const ProfilePage = () => {
         setEditingUsername(true);
     };
 
+
+    // Make API request to update username
     const handleSaveUsername = async () => {
         try {
-            // Make API request to update username
             await axios.put(`https://capstone-project.ngaiti.repl.co/users/${authContext.currentUser.uid}`, {
                 username: username
             });
@@ -100,69 +102,71 @@ const ProfilePage = () => {
 
 
     return (
-        <Container className="my-4">
-            <h1 className="text-center">Profile Page</h1>
-            <Row className="justify-content-center">
-                <Col xs={12} sm={6} className="text-center">
-                    <Image
-                        className='mb-4'
-                        src={profileImageUrl}
-                        alt="Profile"
-                        roundedCircle
-                        style={{ width: '300px', height: '300px' }}
-                    />
-                    <div>
-                        <h3>Upload Profile Picture:</h3>
-                        <Form.Control
-                            type="file"
-                            accept="image/*"
-                            onChange={handleProfilePictureChange}
-                            className="my-3"
+        <AuthWrapper>
+            <Container className="my-4">
+                <h1 className="text-center">Profile Page</h1>
+                <Row className="justify-content-center">
+                    <Col xs={12} sm={6} className="text-center">
+                        <Image
+                            className='mb-4'
+                            src={profileImageUrl}
+                            alt="Profile"
+                            roundedCircle
+                            style={{ width: '300px', height: '300px' }}
                         />
-                    </div>
-                    <div>
-                        <h3>Username:</h3>
-                        {editingUsername ? (
-                            <div>
-                                <Form.Control
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                />
-                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveUsername}>Save</Button>
-                            </div>
-                        ) : (
-                            <div>
-                                <p>{username}</p>
-                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleEditUsername}>Edit</Button>
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        <h3>Email:</h3>
-                        <p>{userEmail}</p>
-                    </div>
-                    <div>
-                        <h3>Description:</h3>
-                        {editingDescription ? (
-                            <div>
-                                <Form.Control
-                                    as="textarea"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                                <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveDescription}>Save</Button>
-                            </div>
-                        ) : (
-                            <div>
-                                <p>{description}</p>
-                                <Button variant="btn btn-outline-dark" onClick={handleEditDescription}>Edit</Button>
-                            </div>
-                        )}
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+                        <div>
+                            <h3>Upload Profile Picture:</h3>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                onChange={handleProfilePictureChange}
+                                className="my-3"
+                            />
+                        </div>
+                        <div>
+                            <h3>Username:</h3>
+                            {editingUsername ? (
+                                <div>
+                                    <Form.Control
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                    />
+                                    <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveUsername}>Save</Button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p>{username}</p>
+                                    <Button variant="btn btn-outline-dark" className="my-3" onClick={handleEditUsername}>Edit</Button>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <h3>Email:</h3>
+                            <p>{userEmail}</p>
+                        </div>
+                        <div>
+                            <h3>Description:</h3>
+                            {editingDescription ? (
+                                <div>
+                                    <Form.Control
+                                        as="textarea"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                    <Button variant="btn btn-outline-dark" className="my-3" onClick={handleSaveDescription}>Save</Button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p>{description}</p>
+                                    <Button variant="btn btn-outline-dark" onClick={handleEditDescription}>Edit</Button>
+                                </div>
+                            )}
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        </AuthWrapper>
     );
 };
 

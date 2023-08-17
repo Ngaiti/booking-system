@@ -6,9 +6,15 @@ import GameCard from '../components/GameCard';
 import GameSortDropdown from '../components/GameSortDropdown';
 import PlatformDropdown from '../components/PlatformSortDropdown';
 import { AuthContext } from '../components/AuthProvider';
+import WishlistModal from '../components/WishlistModal';
 
 
 function SearchBar() {
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [platforms, setPlatforms] = useState([]);
@@ -88,18 +94,21 @@ function SearchBar() {
         game_id,
       })
       .then(() => {
-        console.log('Game added to wishlist successfully');
-        // Optionally, you can update the local state to reflect the change
+        setModalSuccess(true);
+        setModalMessage('Game added to wishlist successfully');
+        setModalVisible(true);
       })
       .catch((error) => {
+        setModalSuccess(false);
+        setModalMessage('Error adding game to wishlist');
+        setModalVisible(true);
         console.error('Error adding game to wishlist:', error);
       });
   };
 
 
 
-
-  // Function to sort the games based on the current sortBy criteria
+  // sort games based on the current sortBy criteria
   const sortGames = () => {
     let sortedArray = [];
 
@@ -132,7 +141,7 @@ function SearchBar() {
 
   useEffect(() => {
     filterByPlatform();
-  }, [filterByPlatform, results, selectedPlatform, sortBy]);
+  }, [results, selectedPlatform, sortBy]);
 
 
   return (
@@ -155,6 +164,12 @@ function SearchBar() {
         />
       </div>
       <GameCard games={filteredResults} addToWishlist={addToWishlist} />
+      <WishlistModal
+        show={modalVisible}
+        onClose={() => setModalVisible(false)}
+        isSuccess={modalSuccess}
+        message={modalMessage}
+      />
     </>
   );
 }

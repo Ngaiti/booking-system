@@ -170,7 +170,7 @@ const Reviews = () => {
                             <Row xs={1} md={2} lg={2} className="g-4">
                                 {reviews.map((review, index) => (
                                     <Col key={index}>
-                                        <Card className="my-3 border-2">
+                                        <Card className="my-3 border-3 rounded p-4 shadow">
                                             <Card.Body>
                                                 <Card.Title>{review.title}</Card.Title>
                                                 <Card.Text>{review.content}</Card.Text>

@@ -1,0 +1,28 @@
+.navbar-title {
+    margin: 0;
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+}
+
+.navbar-title::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -3px;
+    left: 0;
+    background-color: white;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s ease;
+}
+
+.navbar-title:hover::before {
+    transform: scaleX(1);
+}
+
+.navbar-title:hover {
+    color: rgb(36, 162, 205);
+}

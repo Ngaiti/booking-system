@@ -5,10 +5,14 @@ import './Gamelist.css'
 
 import GameCard from '../components/GameCard';
 import { AuthContext } from '../components/AuthProvider';
+import WishlistModal from '../components/WishlistModal';
 
 
 export default function Home() {
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalSuccess, setModalSuccess] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const [platforms, setPlatforms] = useState([]);
     const [games, setGames] = useState([]);
@@ -31,12 +35,22 @@ export default function Home() {
                 console.error('Error fetching platforms:', error);
             });
 
+
+        const currentDate = new Date();
+        const thirtyDaysAgo = new Date(currentDate);
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+        const formattedThirtyDaysAgo = thirtyDaysAgo.toISOString().split('T')[0];
+
+        const last30Days = `${formattedThirtyDaysAgo},${formattedCurrentDate}`;
+
         // Fetch games
         axios
             .get(`${BASE_URL}games`, {
                 params: {
                     key: API_KEY,
-                    dates: '2023-07-01,2023-07-30',
+                    dates: last30Days,
                     // platforms: '187',
                 },
             })
@@ -58,9 +72,14 @@ export default function Home() {
                 game_id,
             })
             .then(() => {
-                console.log('Game added to wishlist successfully');
+                setModalSuccess(true);
+                setModalMessage('Game added to wishlist successfully');
+                setModalVisible(true);
             })
             .catch((error) => {
+                setModalSuccess(false);
+                setModalMessage('Error adding game to wishlist');
+                setModalVisible(true);
                 console.error('Error adding game to wishlist:', error);
             });
     };
@@ -73,6 +92,12 @@ export default function Home() {
         <div>
             <h1 className='text-center m-5'>What&apos;s New</h1>
             <GameCard games={games} addToWishlist={addToWishlist} />
+            <WishlistModal
+                show={modalVisible}
+                onClose={() => setModalVisible(false)}
+                isSuccess={modalSuccess}
+                message={modalMessage}
+            />
 
         </div>
     );

@@ -4,6 +4,7 @@ import { BASE_URL, API_KEY } from '../RAWG';
 import { auth } from '../firebase';
 import GameCard from '../components/GameCard';
 import { AuthContext } from '../components/AuthProvider';
+import AuthWrapper from '../components/AuthWrapper';
 
 export default function Wishlist() {
     const [wishlistGames, setWishlistGames] = useState([]);
@@ -25,7 +26,7 @@ export default function Wishlist() {
                 const gameIds = wishlistItems.map(item => item.game_id);
 
                 if (gameIds.length === 0) {
-                    setShowNoGamesMessage(true); // Show no games message if no game ids to fetch
+                    setShowNoGamesMessage(true);
                 } else {
                     axios
                         .get(`${BASE_URL}games`, {
@@ -70,18 +71,19 @@ export default function Wishlist() {
                 fetchWishlist(userUID);
             }
         });
-
         return () => unsubscribe();
     }, []);
 
     return (
-        <div className='m-5'>
-            <h1 className='text-center m-2'>Your Wishlist</h1>
-            {fetchedGames.length > 0 ? (
-                <GameCard games={fetchedGames} onDelete={handleDelete} showDeleteButton={true} />
-            ) : (
-                showNoGamesMessage ? <h1 className="d-flex justify-content-center align-items-center vh-100">  🥺 No games in your wishlist.</h1> : null
-            )}
-        </div>
+        <AuthWrapper>
+            <div className='m-5'>
+                <h1 className='text-center m-2'>Your Wishlist</h1>
+                {fetchedGames.length > 0 ? (
+                    <GameCard games={fetchedGames} onDelete={handleDelete} showDeleteButton={true} />
+                ) : (
+                    showNoGamesMessage ? <h1 className="d-flex justify-content-center align-items-center vh-100">  🥺 No games in your wishlist.</h1> : null
+                )}
+            </div>
+        </AuthWrapper>
     );
 }
